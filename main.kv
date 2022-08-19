@@ -1,0 +1,319 @@
+#:kivy 2.1.0
+#:import Factory kivy.factory.Factory
+
+<CheckBox>
+    background_checkbox_normal: 'images/DOGE.jpeg'          # You can have a custom image as a checkbox
+    # background_checkbox_down:
+
+<MyPopup>
+    auto_dismiss: False
+    title: "Select Days"
+    
+    size_hint: (0.8, 0.3)
+    pos_hint: {"x": 0.1, "top": 0.9}
+
+    # Checkbox for the days when the alarm should ring
+    # I could also implement a calendar but that's for later (too much work)
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            rows: 2
+            # cols: 7
+            Label: 
+                text: "Sunday"
+            Label:
+                text: "Monday"
+            Label:
+                text: "Tuesday"
+            Label:
+                text: "Wednesday"
+            Label:
+                text: "Thursday"
+            Label:
+                text: "Friday"
+            Label:
+                text: "Saturday"
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Sunday")
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Monday")
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Tuesday")
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Wednesday")
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Thursday")
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Friday")
+            CheckBox: 
+                on_active: root.days_of_the_week_checkbox(self, self.active, "Saturday")
+        Button:
+            text: "Okay"
+            on_release: root.dismiss()
+
+
+WindowManager:
+    AlarmWindow:
+    TimerWindow:
+    StopwatchWindow:
+    WorldTimeWindow:
+
+<AlarmWindow>
+    name: "Alarm"
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        WindowSwitcher:
+            Button:
+                text: "Alarm"
+            Button:
+                text: "Timer"
+                on_release: 
+                    app.root.current = "Timer"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "Stopwatch"
+                on_release: 
+                    app.root.current = "Stopwatch"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "World Time"
+                on_release: 
+                    app.root.current = "World Time"
+                    root.manager.transition.direction = "left"
+
+        Label:
+            id: Alarm
+            text: "Alarm"
+            font_size: "50dp"
+            color: (0, 0, 0)
+        
+        BoxLayout:
+            FloatLayout:
+                TextInput:
+                    pos_hint: {"center_y": 0.5}
+                    id: alarm_time_input
+                    # hint_text: "00:00:00"
+                    input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                    multiline: False
+                    write_tab: False
+                    on_cursor: root.text_inputted()
+                    focus: False
+                    text: ''
+                    # opacity: 0
+                BoxLayout:
+                    orientation: 'horizontal'
+                    pos_hint: {"center_y": 0.5}
+                    Label:
+                        id: time_6
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_5
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        text: ":"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_4
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_3
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        text: ":"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_2
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_1
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+
+        Button:
+            text: "Popup"
+            font_size: 32
+            on_release: Factory.MyPopup().open()
+
+                
+<TimerWindow>:
+    name: "Timer"
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        WindowSwitcher:
+            Button:
+                text: "Alarm"
+                on_release: 
+                    app.root.current = "Alarm"
+                    root.manager.transition.direction = "right"
+            Button:
+                text: "Timer"
+            Button:
+                text: "Stopwatch"
+                on_release: 
+                    app.root.current = "Stopwatch"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "World Time"
+                on_release: 
+                    app.root.current = "World Time"
+                    root.manager.transition.direction = "left"
+
+        Label:
+            id: Timer
+            text: "Timer"
+            font_size: "50dp"
+            color: (0, 0, 0)
+        
+        BoxLayout:
+            FloatLayout:
+                BoxLayout: 
+                    orientation: 'horizontal'
+                    pos_hint: {"center_y": 0.5}
+                    TextInput:
+                        id: time_input_hours
+                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                        multiline: False
+                        write_tab: False
+                        on_cursor: root.text_inputted()
+                        focus: False
+                        text: ''
+                        # opacity: 0
+                    TextInput:
+                        id: time_input_minutes
+                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                        multiline: False
+                        write_tab: False
+                        on_cursor: root.text_inputted()
+                        focus: False
+                        text: ''
+                        # opacity: 0
+                    TextInput:
+                        id: time_input_seconds
+                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                        multiline: False
+                        write_tab: False
+                        on_cursor: root.text_inputted()
+                        focus: False
+                        text: ''
+                        # opacity: 0                    
+                BoxLayout:
+                    orientation: 'horizontal'
+                    pos_hint: {"center_y": 0.5}
+                    Label:
+                        id: time_6
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_5
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        text: ":"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_4
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_3
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        text: ":"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_2
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_1
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+        
+        Button:
+            text: "Does this work?"
+            on_release: root.Start_Timer()
+
+    
+
+<StopwatchWindow>:
+    name: "Stopwatch"
+
+    BoxLayout:
+        orientation: 'vertical'
+        WindowSwitcher:
+            Button:
+                text: "Alarm"
+                on_release: 
+                    app.root.current = "Alarm"
+                    root.manager.transition.direction = "right"
+            Button:
+                text: "Timer"
+                on_release: 
+                    app.root.current = "Timer"
+                    root.manager.transition.direction = "right"
+            Button:
+                text: "Stopwatch"
+            Button:
+                text: "World Time"
+                on_release: 
+                    app.root.current = "World Time"
+                    root.manager.transition.direction = "left"
+    
+        Label:
+            text: "Stopwatch"
+            color: (0, 0, 0)
+
+
+<WorldTimeWindow>:
+    name: "World Time"
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        WindowSwitcher:
+            Button:
+                text: "Alarm"
+                on_release: 
+                    app.root.current = "Alarm"
+                    root.manager.transition.direction = "right"
+            Button:
+                text: "Timer"
+                on_release: 
+                    app.root.current = "Timer"
+                    root.manager.transition.direction = "right"
+            Button:
+                text: "Stopwatch"
+                on_release: 
+                    app.root.current = "Stopwatch"
+                    root.manager.transition.direction = "right"
+            Button:
+                text: "World Time"
+
+        Button:
+            text: "Hello"
