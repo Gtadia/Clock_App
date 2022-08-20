@@ -1,25 +1,28 @@
 from kivy.clock import Clock
 
 def Start_Stopwatch(self, state):
-    self.miliseconds = 0
-    self.seconds = 0
-    self.minutes = 0
-    self.hours = 0
-    self.list_of_labels = [
-        self.ids.time_1,
-        self.ids.time_2,
-        self.ids.time_3,
-        self.ids.time_4,
-        self.ids.time_5,    
-        self.ids.time_6
-        ]
+        if self.was_paused:
+            self.miliseconds = 0
+            self.seconds = 0
+            self.minutes = 0
+            self.hours = 0
+        self.list_of_labels = [
+            self.ids.time_1,
+            self.ids.time_2,
+            self.ids.time_3,
+            self.ids.time_4,
+            self.ids.time_5,    
+            self.ids.time_6
+            ]
+        self.was_paused = False
 
-    if state == "START":
-        Clock.schedule_interval(self.get_time, 0.05)
-        self.ids.startStopButton.text = "STOP"
-    else:
-        Clock.unschedule(self.get_time)
-        self.ids.startStopButton.text = "START"
+        if state == "START":
+            self.event = Clock.schedule_interval(lambda dt: get_time(self, dt), 0.05)
+            self.ids.startStopButton.text = "STOP"
+            self.was_paused = True
+        else:
+            self.event.cancel()
+            self.ids.startStopButton.text = "START"
 
 
 # def get_time(self, deltaTime):
