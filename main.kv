@@ -65,19 +65,23 @@ WindowManager:
         orientation: 'vertical'
 
         WindowSwitcher:
-            Button:
+            size_hint: 0.85, 0.5
+            pos_hint: {'center_x': 0.5}
+            RoundedButton:
                 text: "Alarm"
-            Button:
+                background_normal: 'images/RButton_normal.png'   
+                background_color: (1, 0, 0)
+            RoundedButton:
                 text: "Timer"
                 on_release: 
                     app.root.current = "Timer"
                     root.manager.transition.direction = "left"
-            Button:
+            RoundedButton:
                 text: "Stopwatch"
                 on_release: 
                     app.root.current = "Stopwatch"
                     root.manager.transition.direction = "left"
-            Button:
+            RoundedButton:
                 text: "World Time"
                 on_release: 
                     app.root.current = "World Time"
@@ -91,17 +95,36 @@ WindowManager:
         
         BoxLayout:
             FloatLayout:
-                TextInput:
+                BoxLayout: 
+                    orientation: 'horizontal'
                     pos_hint: {"center_y": 0.5}
-                    id: alarm_time_input
-                    # hint_text: "00:00:00"
-                    input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
-                    multiline: False
-                    write_tab: False
-                    on_cursor: root.text_inputted()
-                    focus: False
-                    text: ''
-                    # opacity: 0
+                    TextInput:
+                        id: time_input_hours
+                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                        multiline: False
+                        write_tab: False
+                        on_cursor: root.text_inputted()
+                        focus: False
+                        text: ''
+                        # opacity: 0
+                    TextInput:
+                        id: time_input_minutes
+                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                        multiline: False
+                        write_tab: False
+                        on_cursor: root.text_inputted()
+                        focus: False
+                        text: ''
+                        # opacity: 0
+                    TextInput:
+                        id: time_input_seconds
+                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
+                        multiline: False
+                        write_tab: False
+                        on_cursor: root.text_inputted()
+                        focus: False
+                        text: ''
+                        # opacity: 0                    
                 BoxLayout:
                     orientation: 'horizontal'
                     pos_hint: {"center_y": 0.5}
@@ -143,7 +166,10 @@ WindowManager:
                         text: "0"
                         font_size: 50
                         color: (0.1, 0.1, 0.1)
-
+        
+        Button:
+            text: "Does this work?"
+            on_release: root.Set_Alarm()
         Button:
             text: "Popup"
             font_size: 32
@@ -157,19 +183,23 @@ WindowManager:
         orientation: 'vertical'
 
         WindowSwitcher:
-            Button:
+            size_hint: 0.85, 0.5
+            pos_hint: {'center_x': 0.5}
+            RoundedButton:
                 text: "Alarm"
                 on_release: 
                     app.root.current = "Alarm"
                     root.manager.transition.direction = "right"
-            Button:
+            RoundedButton:
                 text: "Timer"
-            Button:
+                background_normal: 'images/RButton_normal.png'   
+                background_color: (1, 0, 0)
+            RoundedButton:
                 text: "Stopwatch"
                 on_release: 
                     app.root.current = "Stopwatch"
                     root.manager.transition.direction = "left"
-            Button:
+            RoundedButton:
                 text: "World Time"
                 on_release: 
                     app.root.current = "World Time"
@@ -256,8 +286,13 @@ WindowManager:
                         color: (0.1, 0.1, 0.1)
         
         Button:
-            text: "Does this work?"
+            id: Timer_StartStopButton
+            text: "START"
             on_release: root.Start_Timer()
+
+        Button:
+            text: "RESET"
+            on_release: root.Reset_Timer()
 
     
 
@@ -266,28 +301,89 @@ WindowManager:
 
     BoxLayout:
         orientation: 'vertical'
+
         WindowSwitcher:
-            Button:
+            size_hint: 0.85, 0.5
+            pos_hint: {'center_x': 0.5}
+            RoundedButton:
                 text: "Alarm"
                 on_release: 
                     app.root.current = "Alarm"
                     root.manager.transition.direction = "right"
-            Button:
+            RoundedButton:
                 text: "Timer"
                 on_release: 
                     app.root.current = "Timer"
                     root.manager.transition.direction = "right"
-            Button:
+            RoundedButton:
                 text: "Stopwatch"
-            Button:
+                background_normal: 'images/RButton_normal.png'   
+                background_color: (1, 0, 0)
+            RoundedButton:
                 text: "World Time"
                 on_release: 
                     app.root.current = "World Time"
                     root.manager.transition.direction = "left"
-    
+
         Label:
+            id: Stopwatch
             text: "Stopwatch"
+            font_size: "50dp"
             color: (0, 0, 0)
+        
+        BoxLayout:
+            FloatLayout:
+                BoxLayout: 
+                    orientation: 'horizontal'
+                    pos_hint: {"center_y": 0.5}
+                   
+                BoxLayout:
+                    orientation: 'horizontal'
+                    pos_hint: {"center_y": 0.5}
+                    Label:
+                        id: time_6
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_5
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        text: ":"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_4
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_3
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        text: ":"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_2
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+                    Label:
+                        id: time_1
+                        text: "0"
+                        font_size: 50
+                        color: (0.1, 0.1, 0.1)
+
+            Button:
+                id: startStopButton
+                text: "START"
+                on_press: root.Start_Stopwatch(self.text)
+        
 
 
 <WorldTimeWindow>:
@@ -297,23 +393,37 @@ WindowManager:
         orientation: 'vertical'
 
         WindowSwitcher:
-            Button:
+            size_hint: 0.85, 0.5
+            pos_hint: {'center_x': 0.5}
+            RoundedButton:
                 text: "Alarm"
                 on_release: 
                     app.root.current = "Alarm"
                     root.manager.transition.direction = "right"
-            Button:
+            RoundedButton:
                 text: "Timer"
                 on_release: 
                     app.root.current = "Timer"
                     root.manager.transition.direction = "right"
-            Button:
+            RoundedButton:
                 text: "Stopwatch"
                 on_release: 
                     app.root.current = "Stopwatch"
                     root.manager.transition.direction = "right"
-            Button:
+            RoundedButton:
                 text: "World Time"
+                background_normal: 'images/RButton_normal.png'   
+                background_color: (1, 0, 0)
 
-        Button:
+        RoundedButton:
             text: "Hello"
+
+            on_press: 
+                root.hello()
+            on_release:
+                pass
+
+
+<RoundedButton@Button>
+    background_normal: 'images/RButton_normal.png'          # You can have a custom image as a Button
+    background_down: 'images/RButton_pressed.png'
