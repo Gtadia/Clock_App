@@ -12,11 +12,35 @@ from kivy.uix.button import Button
 import datetime
 import time
 from kivy.clock import Clock
+import json
 
 """
 In order to implement darkmode, I think I should use ids on all 
 the text/buttons that needs their color/background color changed
 """
+
+"""Code that runs to initialize everything"""
+with open("timer.json", "r+") as timer_data: 
+    if len(timer_data.readlines()) < 3:
+        timer_dict = {
+            "seconds": 0,
+            "minutes": 0,
+            "hours": 0
+        }
+        json_object = json.dumps(timer_dict, indent = 4)
+        timer_data.write(json_object)
+    
+
+with open("stopwatch.json", "r+") as stopwatch_data:
+    if len(stopwatch_data.readlines()) < 4:
+        stopwatch_dict = {
+            "miliseconds": 0,
+            "seconds": 0,
+            "minutes": 0,
+            "hours": 0
+        }
+        json_object = json.dumps(stopwatch_dict, indent = 4)
+        stopwatch_data.write(json_object)
 
 class AlarmWindow(Screen):
     from alarm import text_inputted, Set_Alarm
