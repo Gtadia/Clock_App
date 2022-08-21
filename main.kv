@@ -116,32 +116,10 @@ WindowManager:
                         focus: False
                         text: ''
                         # opacity: 0
-                    TextInput:
-                        id: time_input_seconds
-                        input_filter: "float"     # input_filter only allows certain data types to be inputted (in this case, only integers)
-                        multiline: False
-                        write_tab: False
-                        on_cursor: root.text_inputted()
-                        focus: False
-                        text: ''
-                        # opacity: 0                    
+                 
                 BoxLayout:
                     orientation: 'horizontal'
                     pos_hint: {"center_y": 0.5}
-                    Label:
-                        id: time_6
-                        text: "0"
-                        font_size: 50
-                        color: (0.1, 0.1, 0.1)
-                    Label:
-                        id: time_5
-                        text: "0"
-                        font_size: 50
-                        color: (0.1, 0.1, 0.1)
-                    Label:
-                        text: ":"
-                        font_size: 50
-                        color: (0.1, 0.1, 0.1)
                     Label:
                         id: time_4
                         text: "0"
@@ -174,6 +152,13 @@ WindowManager:
             text: "Popup"
             font_size: 32
             on_release: Factory.MyPopup().open()
+        
+        CheckBox:
+            group: "AmPm"
+            on_active: root.SetAmPm("AM")
+        CheckBox:
+            group: "AmPm"
+            on_active: root.SetAmPm("PM")
 
                 
 <TimerWindow>:

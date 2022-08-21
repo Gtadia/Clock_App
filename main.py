@@ -20,6 +20,24 @@ the text/buttons that needs their color/background color changed
 """
 
 """Code that runs to initialize everything"""
+from alarm import run_alarm
+with open("alarm.json", "r+") as alarm_data:
+    if len(alarm_data.readlines()) < 4:
+        alarm_dict = {
+            "minutes": 0,
+            "hours": 0,
+            "am/pm": "AM",
+            "is_active": False
+        }
+        alarm_data.write(json.dumps(alarm_dict, indent=4))
+
+with open("alarm.json", "r") as alarm_data:
+    my_dict = json.load(alarm_data)
+    if my_dict['is_active']:
+        Clock.schedule_interval(run_alarm, 2)
+        print("Should be running")
+
+
 with open("timer.json", "r+") as timer_data: 
     if len(timer_data.readlines()) < 3:
         timer_dict = {
@@ -42,8 +60,9 @@ with open("stopwatch.json", "r+") as stopwatch_data:
         json_object = json.dumps(stopwatch_dict, indent = 4)
         stopwatch_data.write(json_object)
 
+
 class AlarmWindow(Screen):
-    from alarm import text_inputted, Set_Alarm
+    from alarm import text_inputted, Set_Alarm, SetAmPm
 
 class TimerWindow(Screen):
     from timer import text_inputted, Reset_Timer, Start_Timer
