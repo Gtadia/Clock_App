@@ -48,28 +48,52 @@ def SetAmPm(self, state):
         changeAmPm = json.load(open_file)
 
     changeAmPm["am/pm"] = state
-    changeAmPm["is_active"] = True          # Just for debugging purposes
+    print(changeAmPm)
 
     with open("alarm.json", "w") as open_file:
         open_file.write(json.dumps(changeAmPm, indent=4))
 
 
+
+
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    SET ALARM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
+# Make the START ALARM (currently "Does this work?") grayed out until all the information is filled out.
+
 def Set_Alarm(self):
-    list_of_time = []
+    list_of_textInputs = [
+        self.ids.time_input_minutes, 
+        self.ids.time_input_hours  
+    ]
+
+    alarm_data = []
     with open("alarm.json", "r") as open_file:
         for value in json.load(open_file).values():
-            list_of_time.append(value)
+            alarm_data.append(value)
 
 
-    list_of_max_num = [59, 59, 24]
+    max_hour = int()
+    if alarm_data[2] == "24":
+        max_hour = 23
+    else: 
+        max_hour = 13
+
+
+    list_of_max_num = [59, max_hour]
+    print(f"Max Hour: {max_hour}")
     is_valid_format = True
         
     for i in range(2):
-        if list_of_time[i] != '':
-            if int(list_of_time[i]) > list_of_max_num[i]:
+        if alarm_data[i] != '':
+            if int(alarm_data[i]) > list_of_max_num[i]:
                 is_valid_format = False
+                list_of_textInputs[i].text = "0"     # If the format is invalid, it's only that thing (minute or hour) is going to return back to 0
                 break
 
+    """POPUP"""
     if not is_valid_format:
         close_button = Button(text="Dismiss")
         boxlayout_w = BoxLayout(orientation = 'vertical')
@@ -82,17 +106,12 @@ def Set_Alarm(self):
         close_button.bind(on_release = popup.dismiss)
 
         popup.open()
+    """POPUP ENDS"""
     
 
-
-
-    list_of_textInputs = [
-        self.ids.time_input_minutes, 
-        self.ids.time_input_hours  
-    ]
     # am/pm: can either store the following values (am, pm, or 24Hour)
     with open("alarm.json", "w") as open_file:
-        time_dict = {"minutes": list_of_textInputs[0].text, "hours": list_of_textInputs[1].text, "am/pm": "24Hour", "is_active": True}
+        time_dict = {"minutes": list_of_textInputs[0].text, "hours": list_of_textInputs[1].text, "am/pm": alarm_data[2], "is_active": True, "has_rung": False}
         open_file.write(
             json.dumps(time_dict, indent = 4)
             )
@@ -100,20 +119,67 @@ def Set_Alarm(self):
 
 
 
-
     with open("alarm.json", 'r') as open_file:
         my_dict = json.load(open_file)
         if my_dict['is_active']:
-            Clock.schedule_interval(run_alarm, 2)
+            self.event = Clock.schedule_interval(run_alarm, 2)
             print("Should be running")
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    SET ALARM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
+
+
+
 
 
 def run_alarm(self):
     t = time.localtime()
     current_time = time.strftime("%H:%M", t)
-    print(current_time)
+    print(f"acutal current time: {current_time}")
 
+
+    alarm_time = {}
     with open("alarm.json", "r") as open_file:
-        alarm_time = json.load(open_file)
-        if current_time == f"{alarm_time['hours']}:{alarm_time['minutes']}":
+        alarm_time = json.load(open_file)   
+
+        hours = int(alarm_time['hours'])
+        print(alarm_time)
+
+
+        if alarm_time['am/pm'] != '24':
+            if alarm_time['am/pm'] == 'PM' and alarm_time['hours'] != '12':
+                hours = int(alarm_time['hours']) + 12
+            elif alarm_time['am/pm'] == 'AM' and alarm_time['hours'] == '12':
+                hours = "0"
+
+        if current_time == f"{hours}:{alarm_time['minutes']}":
             print("Yep, it works")
+            ring_alarm()
+
+
+
+        print(f"hours: {hours}")
+
+
+
+            
+
+
+def ring_alarm(self):
+    self.event.cancel()
+    print("It has been done")
+
+    alarm_dict = {}
+    with open('alarm.json', 'r') as open_file:
+        alarm_dict = json.load(open_file)
+
+
+    # Have an option where the alarm can either be rung once and is_active is set to False until it is turned back on or 
+    # if it's a weekly thing, check whether or not today is a day that the alarm should ring.
+    alarm_dict["has_rung"] = True
+
+
+    with open("alarm.json", 'w') as open_file:
+        open_file.write(json.dumps(json.dumps(alarm_dict, indent=4)))

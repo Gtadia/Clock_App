@@ -14,9 +14,18 @@ import time
 from kivy.clock import Clock
 import json
 
+
+
+
 """
 In order to implement darkmode, I think I should use ids on all 
 the text/buttons that needs their color/background color changed
+
+
+
+
+
+I THINK MULTIPLE CLOCK.SCHEDULE_INTERVALS() ARE BEING EXECUTED WHEN I PRESS THE START BUTTON MULTIPLE TIMES
 """
 
 """Code that runs to initialize everything"""
@@ -27,15 +36,18 @@ with open("alarm.json", "r+") as alarm_data:
             "minutes": 0,
             "hours": 0,
             "am/pm": "AM",
-            "is_active": False
+            "is_active": False,
+            "has_rung": False
         }
         alarm_data.write(json.dumps(alarm_dict, indent=4))
 
+
+# At the beginning, make sure that every alarm's "has_rung" attribute set to FALSE on launch (The user might have closed the app isntead of clicking the "dismiss alarm" button)
 with open("alarm.json", "r") as alarm_data:
     my_dict = json.load(alarm_data)
-    if my_dict['is_active']:
-        Clock.schedule_interval(run_alarm, 2)
-        print("Should be running")
+    # if my_dict['is_active']:
+    #     Clock.schedule_interval(run_alarm, 2)
+    #     print("Should be running")
 
 
 with open("timer.json", "r+") as timer_data: 

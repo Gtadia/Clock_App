@@ -1,6 +1,7 @@
 {
-    "minutes": "10",
-    "hours": "16",
-    "am/pm": "24Hour",
-    "is_active": true
+    "minutes": "",
+    "hours": "13",
+    "am/pm": "AM",
+    "is_active": true,
+    "has_rung": false
 }

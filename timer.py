@@ -124,13 +124,17 @@ def get_time(self, deltaTime):
         self.ids.Timer_StartStopButton.text = "START"
         self.event.cancel()
     else:
-        if timer_list[0] < -0.5 and self.ids.time_input_seconds.text != '':
+        print("hello?")
+        if timer_list[0] < -0.5:
+            print("1")
             timer_list[1] -= 1
             timer_list[0] = 59
-        if timer_list[1] < -0.5 and self.ids.time_input_minutes.text != '':
+        if timer_list[1] <= -0.5:
+            print("2")
             timer_list[2] -= 1
             timer_list[1] = 59
-        if timer_list[2] < -0.5 and self.ids.time_input_hours.text != '': 
+        if timer_list[2] < -0.5: 
+            print("3")
             increment = 0
 
     
