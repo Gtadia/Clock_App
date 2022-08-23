@@ -1,7 +1,7 @@
 {
-    "minutes": "",
-    "hours": "13",
-    "am/pm": "AM",
+    "minutes": "31",
+    "hours": "6",
+    "am/pm": "PM",
     "is_active": true,
-    "has_rung": false
+    "has_rung": true
 }

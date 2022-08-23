@@ -1,0 +1,81 @@
+#:kivy 2.1.0
+
+WindowManager:
+    FirstWindow:
+    SecondWindow:
+
+
+<SecondWindow>
+    name: "second"
+    BoxLayout: 
+        size_hint: (1, 1)
+    ScrollView:
+        # here we can set bar color
+        bar_color: [0, 0, 255, 1]
+
+        # here we can set bar width
+        bar_width: 12
+        
+        BoxLayout:
+            size: (self.parent.width, self.parent.height-1)
+            id: container
+            orientation: "vertical"
+            size_hint_y: None
+
+            height: self.minimum_height
+
+            canvas.before:
+                Color:
+                    rgba:  rgba("#50C878")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Label:
+                size_hint: (1, None)
+                height: 600
+                markup: True
+                text: "[size=78]GeeksForGeeks[/size]"
+            Label:
+                size_hint: (1, None)
+                height: 600
+                markup: True
+                text: "[size=78]GeeksForGeeks[/size]"
+            Label:
+                size_hint: (1, None)
+                height: 600
+                markup: True
+                text: "[size=78]GeeksForGeeks[/size]"
+            Label:
+                size_hint: (1, None)
+                height: 600
+                markup: True
+                text: "[size=78]GeeksForGeeks[/size]"
+
+
+
+<FirstWindow>
+    name: "first"
+    Button:
+        size_hint: 0.1,0.1 
+        pos_hint: {"top":1}
+        on_release: root.add_time()
+        text: "Hello"
+
+    # ScrollView:
+    #     BoxLayout:
+    #         BoxLayout:
+    #             size: (self.parent.width, self.parent.height-1)
+    #             orientation: "horizontal"
+    #             TimeCounter:
+    #                 id: timer_time
+
+    #         Button:
+    #             on_release: root.add_time()
+    #             text: "Hello"
+
+
+# <SecondWindow>
+#     name: "second"
+
+            

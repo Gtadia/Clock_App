@@ -9,11 +9,12 @@ from kivy.uix.widget import Widget
 from kivy.factory import Factory
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.checkbox import CheckBox
 import datetime
 import time
 from kivy.clock import Clock
 import json
-
+from kivy.properties import ObjectProperty
 
 
 
@@ -29,6 +30,15 @@ I THINK MULTIPLE CLOCK.SCHEDULE_INTERVALS() ARE BEING EXECUTED WHEN I PRESS THE 
 """
 
 """Code that runs to initialize everything"""
+with open("general_settings.json", "r+") as general_settings:
+    if len(general_settings.readlines()) < 3:
+        setting_dict = {
+            "is_dark_mode": False,
+            "is_24_format": False,
+            "animation_enabled": True
+        }
+        general_settings.write(json.dumps(setting_dict, indent=4))
+
 from alarm import run_alarm
 with open("alarm.json", "r+") as alarm_data:
     if len(alarm_data.readlines()) < 4:
@@ -78,59 +88,16 @@ class AlarmWindow(Screen):
 
 class TimerWindow(Screen):
     from timer import text_inputted, Reset_Timer, Start_Timer
-    # def Start_Timer(self):
-    #     print("Hi")
-    #     self.list_of_textInputs = [
-    #         self.ids.time_input_seconds, 
-    #         self.ids.time_input_minutes, 
-    #         self.ids.time_input_hours  
-    #     ]
-
-    #     self.seconds = self.list_of_textInputs[0].text
-    #     self.minutes = self.list_of_textInputs[1].text
-    #     self.hours = self.list_of_textInputs[2].text
-
-
-    #     list_of_max_num = [59, 59, 23]
-    #     is_valid_format = True
-            
-    #     for i in range(3):
-    #         if self.list_of_textInputs[i].text != '':
-    #             if int(self.list_of_textInputs[i].text) > list_of_max_num[i]:
-    #                 is_valid_format = False
-    #                 break
-
-    #     if not is_valid_format:
-    #         close_button = Button(text="Dismiss")
-    #         boxlayout_w = BoxLayout(orientation = 'vertical')
-    #         boxlayout_w.add_widget(Label(text='This is not a valid answer')) 
-    #         boxlayout_w.add_widget(close_button)
-            
-    #         popup = Popup(title='ERROR', auto_dismiss=False, 
-    #         size_hint=(0.8, 0.3), pos_hint={"x": 0.1, "top": 0.9}, 
-    #         content=boxlayout_w)
-    #         close_button.bind(on_release = popup.dismiss)
-
-    #         popup.open()
-
-
-
-    #     if self.ids.Timer_StartStopButton == "START":
-    #         Clock.schedule_interval(self.get_time, 1)
-    #         self.ids.Timer_StartStopButton.text = "STOP"
-        
-    #     if self.is_time_up:
-    #         Clock.unschedule(self.get_time)
-    #         self.ids.Timer_StartStopButton.text = "START"
 
 class StopwatchWindow(Screen):
     from stopwatch import get_time, Start_Stopwatch
-    
 
 class WorldTimeWindow(Screen):
     def hello(self):
         print("Hello")
 
+class GeneralSettingsWindow(Screen):
+    from GeneralSettings import dark_light_mode_change, hour_format_change, enable_animation, reset_data
 
 class WindowManager(ScreenManager):
     pass
@@ -149,7 +116,26 @@ class MyPopup(Popup):
 
         print(self.checked_days)
 
+    def repeat_or_ring_once(self, is_active):
+        print(is_active)
+        if is_active: 
+            print(is_active)
+            for child in reversed(self.ids.checkbox_days.children):         # In a certain layout, it will traverse through the entire list to find all the children/widgets
+                if isinstance(child, CheckBox):   
+                    child.disabled = True
+        else:
+            print(is_active)
+            for child in reversed(self.ids.checkbox_days.children):         # In a certain layout, it will traverse through the entire list to find all the children/widgets
+                if isinstance(child, CheckBox):   
+                    child.disabled = False
+
 class ClockApp(App):
+    with open("general_settings.json", 'r') as open_file:
+        settings = json.load(open_file)
+        dark_mode = ObjectProperty(settings['is_dark_mode'])
+        hour_format = ObjectProperty(settings['is_24_format'])
+        animation = ObjectProperty(settings['animation_enabled'])
+        
     def build(self):
         Window.clearcolor = (1, 1, 1)       # Find ways to go between dark and light mode, even if that means just using a canvas
         return Builder.load_file("main.kv")

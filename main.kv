@@ -17,6 +17,7 @@
     BoxLayout:
         orientation: 'vertical'
         GridLayout:
+            id: checkbox_days
             rows: 2
             # cols: 7
             Label: 
@@ -33,6 +34,8 @@
                 text: "Friday"
             Label:
                 text: "Saturday"
+            Label:
+                text: "Ring once/Repeat"
             CheckBox: 
                 on_active: root.days_of_the_week_checkbox(self, self.active, "Sunday")
             CheckBox: 
@@ -47,6 +50,9 @@
                 on_active: root.days_of_the_week_checkbox(self, self.active, "Friday")
             CheckBox: 
                 on_active: root.days_of_the_week_checkbox(self, self.active, "Saturday")
+            
+            Switch:
+                on_active: root.repeat_or_ring_once(self.active)
         Button:
             text: "Okay"
             on_release: root.dismiss()
@@ -57,6 +63,9 @@ WindowManager:
     TimerWindow:
     StopwatchWindow:
     WorldTimeWindow:
+    GeneralSettingsWindow:
+        name: "settings"
+    
 
 <AlarmWindow>
     name: "Alarm"
@@ -146,12 +155,12 @@ WindowManager:
                         color: (0.1, 0.1, 0.1)
         
         Button:
-            text: "Does this work?"
-            on_release: root.Set_Alarm()
-        Button:
-            text: "Popup"
+            text: "Select Days"
             font_size: 32
             on_release: Factory.MyPopup().open()
+        Button:
+            text: "Confirm"
+            on_release: root.Set_Alarm()
         
         CheckBox:
             group: "AmPm"
@@ -402,6 +411,11 @@ WindowManager:
                 text: "World Time"
                 background_normal: 'images/RButton_normal.png'   
                 background_color: (1, 0, 0)
+            RoundedButton:
+                text: "Settings"
+                on_release:
+                    app.root.current = "settings"
+                    root.manager.transition.direction = "right"
 
         RoundedButton:
             text: "Hello"
@@ -412,6 +426,53 @@ WindowManager:
                 pass
 
 
+
+<GeneralSettingsWindow>:
+    name: "settings"
+    GridLayout:
+        cols: 2
+        Label:
+            id: Dark_Light_Label     # Change the text to light mode when in dark mode and dark mode when set to light mode
+            text: "Dark Mode"
+            color: 0, 0, 0
+        Switch:
+            id: Dark_Light_Switch
+            active: app.dark_mode
+            on_active: root.dark_light_mode_change(self.active)
+        
+        Label:
+            text: "12/24 Hour Format"
+            color: 0, 0, 0
+        Switch:
+            id: hour_format_switch
+            active: app.hour_format
+            on_active: root.hour_format_change(self.active)
+
+        Label: 
+            text: "Enable Animation"
+            color: 0, 0, 0
+        Switch:
+            id: animation_switch
+            active: app.animation
+            on_active: root.enable_animation(self.active)
+
+        Label:
+            text: "Reset Cache"
+            color: 0, 0, 0
+        Button: 
+            text: "Reset"
+            on_release: root.reset_data()
+
+
+
+
+
+
 <RoundedButton@Button>
     background_normal: 'images/RButton_normal.png'          # You can have a custom image as a Button
+    # id: rButton
+    # rButton_bg_color: (1, 0, 0, 1)
+    # canvas.before:
+    #     Color:
+    #         rgba: rButton_bg_color
     background_down: 'images/RButton_pressed.png'
